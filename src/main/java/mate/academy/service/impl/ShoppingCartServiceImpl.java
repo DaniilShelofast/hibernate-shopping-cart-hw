@@ -1,5 +1,6 @@
 package mate.academy.service.impl;
 
+import java.util.List;
 import mate.academy.dao.ShoppingCartDao;
 import mate.academy.dao.TicketDao;
 import mate.academy.lib.Inject;
@@ -9,7 +10,6 @@ import mate.academy.model.ShoppingCart;
 import mate.academy.model.Ticket;
 import mate.academy.model.User;
 import mate.academy.service.ShoppingCartService;
-import mate.academy.service.UserService;
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
@@ -17,8 +17,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ShoppingCartDao shoppingCartDao;
     @Inject
     private TicketDao ticketDao;
-    @Inject
-    private UserService userService;
 
     @Override
     public void addSession(MovieSession movieSession, User user) {
@@ -26,6 +24,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ticket.setMovieSession(movieSession);
         ticket.setUser(user);
         ticketDao.add(ticket);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setTickets(List.of(ticket));
+        shoppingCartDao.add(shoppingCart);
+        shoppingCartDao.update(shoppingCart);
     }
 
     @Override
@@ -35,11 +37,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public void registerNewShoppingCart(User user) {
-        userService.add(user);
+        ShoppingCart shoppingCart = new ShoppingCart();
+        shoppingCart.setUser(user);
+        shoppingCartDao.add(shoppingCart);
+        shoppingCartDao.update(shoppingCart);
     }
 
     @Override
     public void clear(ShoppingCart shoppingCart) {
         shoppingCart.getTickets().clear();
+        shoppingCartDao.update(shoppingCart);
     }
 }
