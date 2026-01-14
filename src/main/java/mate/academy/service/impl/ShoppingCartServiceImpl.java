@@ -27,7 +27,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setTickets(List.of(ticket));
         shoppingCartDao.add(shoppingCart);
-        shoppingCartDao.update(shoppingCart);
     }
 
     @Override
@@ -40,7 +39,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.setUser(user);
         shoppingCartDao.add(shoppingCart);
-        shoppingCartDao.update(shoppingCart);
     }
 
     @Override
